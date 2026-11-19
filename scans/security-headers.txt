@@ -1,0 +1,28 @@
+
+===================================
+     CYBERSHIELD SECURITY SCANNER
+===================================
+
+Target: http://127.0.0.1:3000
+
+HTTP Status: 200
+
+SECURITY HEADER ANALYSIS
+-----------------------------------
+[MISSING] Content-Security-Policy
+          Purpose: Helps prevent malicious script injection
+[PRESENT] X-Content-Type-Options
+          Value: nosniff
+[PRESENT] X-Frame-Options
+          Value: SAMEORIGIN
+[MISSING] Referrer-Policy
+          Purpose: Controls referrer information
+[MISSING] Permissions-Policy
+          Purpose: Controls browser feature permissions
+
+===================================
+          SCAN SUMMARY
+===================================
+Headers present : 2
+Headers missing: 3
+Scan completed successfully.
