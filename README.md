@@ -1,79 +1,72 @@
-# CyberShield – Web Application Security Assessment Lab
+# 🛡️ CyberShield – Web Application Security Assessment Lab
 
-## Overview
-CyberShield is a beginner-level web application security assessment project built using Kali Linux and OWASP Juice Shop.
+A beginner-level, hands-on web application security assessment project built using Kali Linux, OWASP Juice Shop, Burp Suite Community Edition, Nmap, and Python.
 
-The project demonstrates practical security testing techniques, HTTP traffic inspection, vulnerability identification, security header analysis, and vulnerability documentation.
+## 📌 Project Overview
 
-All testing was conducted against an intentionally vulnerable application running locally.
+CyberShield is a controlled web application security testing lab designed to explore common web security weaknesses through practical testing.
 
-## Objectives
+The project focuses on understanding HTTP communication, identifying access-control issues, analyzing error handling, performing basic reconnaissance, and automating HTTP security-header checks.
+
+All testing was conducted against an intentionally vulnerable OWASP Juice Shop instance deployed locally.
+
+## 🎯 Project Objectives
+
 - Understand basic web application security testing.
-- Perform network and service reconnaissance.
+- Perform local network reconnaissance.
 - Inspect HTTP requests and responses.
-- Identify access control weaknesses.
-- Examine application error handling.
-- Automate HTTP security header checks using Python.
-- Document findings and recommend remediation.
+- Explore broken access control.
+- Identify verbose error disclosure.
+- Analyze HTTP security headers.
+- Develop a Python-based security-header checker.
+- Document findings and defensive recommendations.
 
-## Tools and Technologies
-- Kali Linux
-- Docker
-- OWASP Juice Shop
-- Nmap
-- Burp Suite Community Edition
-- Python 3
-- Git and GitHub
+## 🧰 Tools and Technologies
 
-## Project Structure
+| Tool / Technology | Purpose |
+|---|---|
+| Kali Linux | Security testing environment |
+| OWASP Juice Shop | Intentionally vulnerable target application |
+| Docker | Local application deployment |
+| Nmap | Port and service reconnaissance |
+| Burp Suite Community Edition | HTTP request and response analysis |
+| Python | Security-header checking |
+| Git and GitHub | Version control and project hosting |
 
-```text
-CyberShield/
-├── reconnaissance/
-│   ├── nmap-initial.txt
-│   └── http-headers.txt
-├── scans/
-│   └── security-headers.txt
-├── scripts/
-│   └── security_headers.py
-├── vulnerability-reports/
-│   ├── IDOR-basket-access.md
-│   └── error-handling.md
-├── remediation/
-├── screenshots/
-├── methodology/
-└── README.md
-```
+## 🏗️ Lab Environment
 
-## Security Testing Performed
+**Target Application:** OWASP Juice Shop  
+**Target URL:** `http://127.0.0.1:3000`  
+**Deployment:** Docker container  
+**Network Scope:** Localhost only
 
-### 1. Network Reconnaissance
-Used Nmap to identify the local target service and inspect its HTTP response.
+The application was bound to the loopback interface to keep the testing environment isolated from external network access.
 
-### 2. HTTP Traffic Inspection
-Used Burp Suite Community Edition to intercept and inspect HTTP requests and responses.
+## 🔍 Assessment Activities
 
-### 3. IDOR – Broken Access Control
-Tested the shopping basket endpoint by changing the basket identifier.
+### 1. Reconnaissance
+- Performed an Nmap scan against the local application port.
+- Identified the HTTP service response.
+- Recorded initial reconnaissance results.
 
-Observed that an authenticated test user could retrieve another user's basket information.
+### 2. Manual Web Application Testing
+- Configured Burp Suite Community Edition.
+- Captured and inspected HTTP requests.
+- Modified basket identifiers to examine access-control enforcement.
+- Requested an invalid application route to examine error handling.
 
-### 4. Improper Error Handling
-Requested an invalid endpoint and observed a detailed HTTP 500 error containing internal application paths and stack trace information.
+### 3. Python Security Header Checker
 
-## Python Security Header Checker
+Developed a Python script using the `urllib` library to inspect five HTTP security headers.
 
-Developed a Python script to inspect the target application's HTTP response headers.
-
-The script checks:
-
+**Headers checked:**
 - Content-Security-Policy
 - X-Content-Type-Options
 - X-Frame-Options
 - Referrer-Policy
 - Permissions-Policy
 
-### Observed Results
+**Observed results:**
 
 | Header | Result |
 |---|---|
@@ -83,43 +76,110 @@ The script checks:
 | Referrer-Policy | Missing |
 | Permissions-Policy | Missing |
 
-The results indicate missing security-hardening headers. Their absence alone does not establish an exploitable vulnerability.
+**Summary:** 2 headers present and 3 missing.
 
-### Run the Scanner
+Missing headers indicate potential hardening improvements; they do not independently prove an exploitable vulnerability.
+
+## 🚨 Documented Security Findings
+
+### Finding 01 – Broken Access Control (IDOR-style basket access)
+
+- Tested basket access by modifying the basket identifier in an HTTP request.
+- Observed access to another user's basket in the intentionally vulnerable lab.
+- Documented the observation, potential impact, and recommended server-side authorization checks.
+
+**Report:** `vulnerability-reports/IDOR-basket-access.md`
+
+### Finding 02 – Verbose Error Handling
+
+- Requested an invalid application route.
+- Observed an HTTP 500 response containing a detailed stack trace and internal application paths.
+- Documented the information-disclosure risk and recommended safer error handling.
+
+**Report:** `vulnerability-reports/error-handling.md`
+
+## 🛠️ Remediation Recommendations
+
+The project includes defensive recommendations covering:
+
+- Server-side authorization and resource ownership validation.
+- Generic error responses and secure server-side logging.
+- Appropriate HTTP security-header configuration.
+- General web application security practices.
+
+See: `remediation/remediation-guide.md`
+
+## 📁 Project Structure
+
+```text
+CyberShield/
+│
+├── reconnaissance/
+│   ├── nmap-initial.txt
+│   └── http-headers.txt
+│
+├── scans/
+│   └── security-headers.txt
+│
+├── scripts/
+│   └── security_headers.py
+│
+├── vulnerability-reports/
+│   ├── IDOR-basket-access.md
+│   └── error-handling.md
+│
+├── methodology/
+│   └── testing-methodology.md
+│
+├── remediation/
+│   └── remediation-guide.md
+│
+├── screenshots/
+│
+├── .gitignore
+└── README.md
+```
+
+## ▶️ Running the Python Header Checker
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Raghavi-20/CyberShield-Web-Penetration-Testing-Lab.git
+```
+
+Navigate into the project:
+
+```bash
+cd CyberShield-Web-Penetration-Testing-Lab
+```
+
+Run the script:
 
 ```bash
 python scripts/security_headers.py
 ```
 
-## Vulnerability Reports
+The local OWASP Juice Shop application must be running at `http://127.0.0.1:3000` for the check to work.
 
-Detailed reports are available in the `vulnerability-reports/` directory:
+## 📚 Documentation
 
-1. IDOR – Shopping Basket Access
-2. Verbose Error Handling
+- [Testing Methodology](methodology/testing-methodology.md)
+- [Remediation Guide](remediation/remediation-guide.md)
+- [IDOR Basket Access Report](vulnerability-reports/IDOR-basket-access.md)
+- [Error Handling Report](vulnerability-reports/error-handling.md)
 
-Each report includes the issue description, testing evidence, potential impact, and recommended remediation.
+## ⚠️ Scope and Disclaimer
 
-## Lab Environment
+This project was performed strictly within an isolated local lab using OWASP Juice Shop.
 
-- Attacker environment: Kali Linux
-- Target application: OWASP Juice Shop
-- Deployment: Docker
-- Target address: http://127.0.0.1:3000
+No external websites, production systems, or third-party applications were tested.
 
-## Scope and Ethics
+The project is intended for educational and defensive cybersecurity learning purposes.
 
-This project was performed exclusively against a deliberately vulnerable application hosted in a local lab environment.
+## 👩‍💻 Author
 
-No external websites, production systems, or third-party accounts were targeted.
-
-## Future Improvements
-- Add additional verified vulnerability assessments.
-- Implement automated security checks.
-- Add remediation testing and validation.
-- Improve Python scanner functionality.
-- Include screenshots and testing evidence.
-
-## Author
-Raghavi S  
+**Raghavi S**  
 B.Tech Information Technology Student
+
+GitHub: [Raghavi-20](https://github.com/Raghavi-20)
